@@ -1,5 +1,5 @@
 import { CreateMLCEngine, MLCEngine, prebuiltAppConfig } from "@mlc-ai/web-llm";
-
+console.log("prebuiltAppConfig", prebuiltAppConfig);
 let engine: MLCEngine | null = null;
 
 type PrebuiltModelEntry = {

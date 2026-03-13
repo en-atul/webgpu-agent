@@ -22,3 +22,14 @@ body {
 #root {
   min-height: 100vh;
 }
+
+@keyframes gradient-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gradient-spin {
+  animation: gradient-spin 4s linear infinite;
+  will-change: transform;
+}

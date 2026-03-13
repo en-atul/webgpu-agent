@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useModelStore } from "../../shared/model/store";
+import { formatModelId, ModelSelector } from "../../shared/ui/ModelSelector";
+import { Tooltip } from "../../shared/ui/Tooltip";
 import {
-  FiCpu,
-  FiChevronDown,
   FiGrid,
+  FiInfo,
   FiMessageCircle,
   FiCode,
   FiFileText,
@@ -13,16 +13,13 @@ import {
 } from "react-icons/fi";
 
 export function RootLayout() {
-  const [modelMenuOpen, setModelMenuOpen] = useState(false);
   const {
     ready,
     progress,
     status,
     loadModel,
     modelId,
-    availableModels,
-    setModelId,
-    downloadedModels,
+    loading,
   } = useModelStore();
 
   return (
@@ -121,20 +118,42 @@ export function RootLayout() {
         <div className="mt-auto space-y-2 text-xs text-gray-400">
           {!ready && (
             <>
-              <button
-                onClick={loadModel}
-                className="w-full rounded-lg bg-violet-600/90 hover:bg-violet-500/90 px-3 py-2 text-xs font-medium text-white shadow-sm shadow-violet-600/30"
-              >
-                Download / Load Model
-              </button>
-              <p>{status}</p>
-              <div className="w-full h-1.5 rounded-full bg-neutral-900 overflow-hidden">
-                <div
-                  className="h-full bg-violet-500/80 transition-[width] duration-500 ease-out"
-                  style={{ width: `${Math.round(progress * 100)}%` }}
-                />
+              <div className="flex items-center gap-1.5">
+                <span className="text-gray-300">Model:</span>
+                <span className="font-medium text-white truncate">{formatModelId(modelId)}</span>
+                <Tooltip content="To change model, click the model selector in the top right.">
+                <span className="text-gray-500 hover:text-gray-300 cursor-help shrink-0 inline-flex">
+                  <FiInfo className="h-3.5 w-3.5" />
+                </span>
+              </Tooltip>
               </div>
-              <p>{Math.round(progress * 100)}%</p>
+              <div className="relative w-full rounded-full p-[3px] overflow-hidden">
+                <div
+                  className="absolute left-1/2 top-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full animate-gradient-spin"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg at 50% 50%, #8b5cf6, #a78bfa, #c084fc, #7c3aed, #6d28d9, #8b5cf6)",
+                  }}
+                />
+                <button
+                  onClick={loadModel}
+                  className="relative w-full rounded-full bg-black hover:bg-neutral-900 border border-violet-500/50 px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors z-10"
+                >
+                  Download / Load Model
+                </button>
+              </div>
+              {loading && (
+                <>
+                  <p>{status}</p>
+                  <div className="w-full h-1.5 rounded-full bg-neutral-900 overflow-hidden">
+                    <div
+                      className="h-full bg-violet-500/80 transition-[width] duration-500 ease-out"
+                      style={{ width: `${Math.round(progress * 100)}%` }}
+                    />
+                  </div>
+                  <p>{Math.round(progress * 100)}%</p>
+                </>
+              )}
             </>
           )}
           {ready && (
@@ -155,60 +174,7 @@ export function RootLayout() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setModelMenuOpen((v) => !v)}
-                className="flex items-center gap-2 rounded-full border border-sky-500/40 px-4 md:px-6 py-1.5 text-xs text-gray-300 bg-white/5 hover:bg-sky-500/20 hover:border-sky-400 transition-colors min-w-[240px]"
-              >
-                <FiCpu className="h-3.5 w-3.5 text-sky-300" />
-                <span className="hidden sm:inline text-gray-400">Model</span>
-                <span className="flex-1 truncate text-gray-100 text-[11px] text-left">
-                  {modelId.replace("-Instruct-q4f32_1-MLC", "")}
-                </span>
-                <FiChevronDown
-                  className={`h-3 w-3 text-gray-400 transition-transform ${
-                    modelMenuOpen ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
-
-              {modelMenuOpen && (
-                <div className="absolute right-0 mt-2 w-72 rounded-2xl border border-white/10 bg-black/95 shadow-xl z-20">
-                  <div className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wide text-gray-500">
-                    WebGPU models
-                  </div>
-                  <ul className="max-h-64 overflow-auto text-xs">
-                    {availableModels.map((id) => {
-                      const isActive = id === modelId;
-                      return (
-                        <li key={id}>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setModelId(id);
-                              setModelMenuOpen(false);
-                            }}
-                            className={`flex w-full items-center justify-between px-3 py-2 text-left ${
-                              isActive
-                                ? "bg-sky-500/20 text-sky-300"
-                                : "text-gray-200 hover:bg-white/10 hover:text-sky-200"
-                            }`}
-                          >
-                            <span className="truncate">
-                              {id.replace("-Instruct-q4f32_1-MLC", "")}
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <div className="px-3 py-2 border-t border-white/10 text-[10px] text-gray-500">
-                    Downloading multiple models can use significant local storage.
-                  </div>
-                </div>
-              )}
-            </div>
+            <ModelSelector />
           </div>
         </header>
 
