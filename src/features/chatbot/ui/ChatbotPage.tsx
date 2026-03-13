@@ -36,8 +36,11 @@ export function ChatbotPage() {
     setInput("");
     setLoading(true);
     try {
+      const historyForContext = [...messages, userMessage];
       await runAgentStream({
-        prompt: `You are a helpful conversational assistant. Format replies with markdown: use **bold** for key terms and "- " for bullet lists (e.g. after "Tasks:" put each item on its own line starting with "- "). Use short paragraphs and line breaks between sections.\n\nUser: ${userMessage.content}`,
+        messages: historyForContext,
+        systemPrompt:
+          "You are a helpful conversational assistant. Format replies with markdown: use **bold** for key terms and \"- \" for bullet lists (e.g. after \"Tasks:\" put each item on its own line starting with \"- \"). Use short paragraphs and line breaks between sections.",
         onDelta: (delta) => {
           setMessages((prev) => {
             if (!prev.length) return prev;

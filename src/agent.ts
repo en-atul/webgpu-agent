@@ -1,5 +1,4 @@
 import { CreateMLCEngine, MLCEngine, prebuiltAppConfig } from "@mlc-ai/web-llm";
-console.log("prebuiltAppConfig", prebuiltAppConfig);
 let engine: MLCEngine | null = null;
 
 type PrebuiltModelEntry = {
@@ -71,19 +70,28 @@ export async function runAgent(prompt: string): Promise<string> {
   return response.choices[0].message.content ?? "";
 }
 
+export type ChatMessage = { role: "user" | "assistant"; content: string };
+
 export async function runAgentStream(args: {
-  prompt: string;
+  prompt?: string;
+  messages?: ChatMessage[];
+  systemPrompt?: string;
   onDelta: (deltaText: string) => void;
 }): Promise<string> {
   const engine = await initModel();
 
+  const messages: { role: "user" | "assistant" | "system"; content: string }[] = [];
+  if (args.systemPrompt) {
+    messages.push({ role: "system", content: args.systemPrompt });
+  }
+  if (args.messages?.length) {
+    messages.push(...args.messages);
+  } else if (args.prompt) {
+    messages.push({ role: "user", content: args.prompt });
+  }
+
   const chunks = (await engine.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content: args.prompt,
-      },
-    ],
+    messages,
     stream: true,
   })) as AsyncIterable<unknown>;
 

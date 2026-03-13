@@ -1,4 +1,4 @@
-import { type FormEventHandler, useState } from "react";
+import { type SubmitEventHandler, useState } from "react";
 import { runAgent } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
@@ -36,7 +36,7 @@ export function WebSearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (!query.trim() || !ready) return;
     setLoading(true);
@@ -125,6 +125,9 @@ export function WebSearchPage() {
       <p className="text-sm text-gray-400 max-w-xl">
         This tool runs a real web search (DuckDuckGo Instant Answer API) and
         then lets the local WebGPU model summarize and interpret the results.
+      </p>
+      <p className="text-xs text-gray-500 max-w-xl italic">
+        For better results, use Google Search API (requires API key).
       </p>
       {!ready && (
         <p className="text-sm text-amber-300">

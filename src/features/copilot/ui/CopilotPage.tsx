@@ -1,4 +1,4 @@
-import { type FormEventHandler, useState } from "react";
+import { type SubmitEventHandler, useState } from "react";
 import { runAgentStream } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
@@ -10,7 +10,7 @@ export function CopilotPage() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (!prompt.trim() || !ready) return;
     setLoading(true);

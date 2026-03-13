@@ -1,4 +1,4 @@
-import { type FormEventHandler, useState } from "react";
+import { type SubmitEventHandler, useState } from "react";
 import { useKnowledgeBaseStore } from "../model/store";
 import { runAgent } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
@@ -15,7 +15,7 @@ export function KnowledgeBasePage() {
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const onAddNote: FormEventHandler<HTMLFormElement> = (e) => {
+  const onAddNote: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
     addNote(title, content);
@@ -23,7 +23,7 @@ export function KnowledgeBasePage() {
     setContent("");
   };
 
-  const onAsk: FormEventHandler<HTMLFormElement> = async (e) => {
+  const onAsk: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (!query.trim() || !ready || !notes.length) return;
     setLoading(true);

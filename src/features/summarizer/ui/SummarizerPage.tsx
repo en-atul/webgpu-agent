@@ -1,4 +1,4 @@
-import { type FormEventHandler, useRef, useState } from "react";
+import { type SubmitEventHandler, useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { runAgentStream } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
@@ -37,7 +37,7 @@ export function SummarizerPage() {
     }
   };
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const onSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     if (!text.trim() || !ready) return;
     setLoading(true);
