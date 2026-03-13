@@ -1,45 +1,67 @@
 # WebGPU Agent
 
-**WebGPU Agent** is a dashboard of AI tools that run entirely in your browser. One language model (e.g. Llama 3.2) is loaded via WebGPU and then used for chat, summarization, a personal knowledge base, and web search—no API keys, no server, and your data stays on your device.
+**WebGPU Agent** is a dashboard of AI tools that run entirely in your browser. One language model (e.g. Llama 3.2) is loaded via WebGPU and powers chat, summarization, a multi-agent coder, knowledge base, and web search—no API keys, no server, and your data stays on your device.
 
 ## Screenshots
 
-| AI Chatbot | Knowledge Base | Web Search |
-|------------|----------------|------------|
-| ![AI Chatbot](ai-chatbot.avif) | ![Knowledge Base](knowledge-base.avif) | ![Web Search](web-search.avif) |
+| Feature | Screenshot |
+|---------|------------|
+| AI Chatbot | ![AI Chatbot](ai-chatbot.avif) |
+| Knowledge Base | ![Knowledge Base](knowledge-base.avif) |
+| Web Search | ![Web Search](web-search.avif) |
 
-## What’s in the app
+## Features
 
-- **Overview** — Home page with links to each tool.
-- **AI Chatbot** — Free-form chat with the loaded model. Replies stream token-by-token, support markdown and code blocks (with syntax highlighting), and the message list has its own scroll so the page doesn’t stretch. You can switch the active model from the header.
-- **Coding Copilot** — Paste or type code and ask the model to improve, explain, or refactor it. Good for quick edits and learning.
-- **Document Summarizer** — Paste long text and get a short summary from the same local model.
-- **Offline Knowledge Base** — Add notes (title + content). Then ask questions in natural language; the app sends your question plus all notes to the model and asks it to answer only from that context. Useful for personal docs, meeting notes, or reference material without sending data elsewhere.
-- **Web Search** — Enter a query; the app fetches results from DuckDuckGo (via a dev proxy to avoid CORS) and shows snippets. You can then ask the local model to summarize or synthesize those results.
+| Tool | Description |
+|------|-------------|
+| **Overview** | Home page with links to each tool. |
+| **AI Chatbot** | Free-form chat with conversation context. Replies stream token-by-token with markdown and syntax-highlighted code blocks. |
+| **Coding Copilot** | Paste or type a request; get code suggestions and examples in TypeScript/JavaScript. |
+| **Coder Agent** | Multi-agent pipeline: **Planner** → **Coder** → **Reviewer**. Describe a coding task and watch the agents collaborate. Runs in a Web Worker for responsive UI. |
+| **Document Summarizer** | Paste text or upload PDF, DOCX, or TXT files. Get bullet points and a short summary from the local model. |
+| **Knowledge Base** | Add notes (title + content), then ask questions. The model answers only from your notes—useful for personal docs and reference material. |
+| **Web Search** | Enter a query; the app fetches results from DuckDuckGo and the model summarizes or synthesizes them. For better results, use Google Search API (requires API key). |
 
-Everything uses the **same in-browser model**. Load it once from the sidebar (progress bar shows download/init); when it’s ready, every tool can use it. Model choice is stored so you can switch between available WebLLM models from the header.
+Everything uses the **same in-browser model**. Load it once from the sidebar; when ready, every tool can use it. Inference runs in a **Web Worker** so the UI stays responsive during long generations.
 
-## How to run it
+## Requirements
 
-You need a browser with **WebGPU** (Chrome 113+, Edge 113+, or Safari 18+) and enough disk space for the model (e.g. ~600MB+ for Llama 3.2 1B).
+- **WebGPU** support (Chrome 113+, Edge 113+, Safari 18+)
+- Sufficient disk space for the model (~600MB+ for Llama 3.2 1B)
+
+## Quick Start
 
 ```bash
 bun install
 bun run dev
 ```
 
-Open the app, choose a model in the sidebar, and click **Download / Load Model**. When the bar hits 100%, the model is ready for all tools.
+Open the app, choose a model in the sidebar, and click **Download / Load Model**. When the progress bar reaches 100%, the model is ready.
 
+## Scripts
 
-## How it’s built
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Start dev server |
+| `bun run build` | Production build |
+| `bun run preview` | Preview production build |
+| `bun run lint` | Run ESLint |
 
-- **Bun** for install and run; **React 19** + **TypeScript** + **Vite** for the UI and build.
-- **MLC WebLLM** (WebGPU) to load and run the model in the browser; **Zustand** holds model state (progress, ready, selected model).
-- **React Router** for the shell and routes (`/`, `/chatbot`, `/copilot`, `/summarizer`, `/knowledge-base`, `/web-search`).
-- **react-markdown** + **remark-gfm** + **react-syntax-highlighter** for rendering assistant messages (lists, bold, code blocks).
-- **Tailwind CSS** for layout and styling.
+## Tech Stack
 
-The core logic lives in `src/agent.ts`: it initializes the MLC engine, exposes `runAgent(prompt)` for one-shot answers and `runAgentStream({ prompt, onDelta })` for streaming. Each feature builds its own prompt (e.g. “answer from these notes”, “summarize this”, “summarize these search results”) and calls the same agent.
+- **Runtime**: Bun
+- **UI**: React 19, TypeScript, Vite, Tailwind CSS
+- **LLM**: [MLC WebLLM](https://github.com/mlc-ai/web-llm) (WebGPU) with Web Worker for inference
+- **State**: Zustand
+- **Routing**: React Router (`/`, `/chatbot`, `/copilot`, `/coder-agent`, `/summarizer`, `/knowledge-base`, `/web-search`)
+- **Markdown**: react-markdown, remark-gfm, react-syntax-highlighter
+- **Documents**: pdfjs-dist (PDF), mammoth (DOCX)
+
+## Architecture
+
+- **`src/agent.ts`** — Initializes the MLC engine in a Web Worker, exposes `runAgent(prompt)` and `runAgentStream({ messages, systemPrompt, onDelta })`.
+- **`src/worker.ts`** — Web Worker that runs model loading and inference off the main thread.
+- Each feature builds its own prompt and calls the same agent. The Coder Agent uses a multi-step pipeline (Planner → Coder → Reviewer) with dedicated system prompts per role.
 
 ## License
 

@@ -33,7 +33,7 @@ const FEATURES = [
   },
   {
     title: "Document Summarizer",
-    description: "Paste long text and get bullet points and a short summary.",
+    description: "Paste text or upload PDF, DOCX, or TXT—get bullet points and a short summary.",
     path: "/summarizer",
     icon: FiFileText,
     accent: "amber",
