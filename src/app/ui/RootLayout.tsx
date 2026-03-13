@@ -26,7 +26,7 @@ export function RootLayout() {
   } = useModelStore();
 
   return (
-    <div className="min-h-screen bg-[#050505] text-gray-200 flex">
+    <div className="h-screen bg-[#050505] text-gray-200 flex overflow-hidden">
       <aside className="w-64 border-r border-white/5 px-5 py-6 flex flex-col gap-6 bg-black/70 backdrop-blur">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-white">
@@ -146,7 +146,7 @@ export function RootLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col px-8 py-6">
+      <main className="flex-1 min-h-0 flex flex-col px-8 py-6">
         <header className="flex items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-semibold text-white">Workspace</h2>

@@ -37,7 +37,7 @@ export function ChatbotPage() {
     setLoading(true);
     try {
       await runAgentStream({
-        prompt: `You are a helpful conversational assistant.\n\nUser: ${userMessage.content}`,
+        prompt: `You are a helpful conversational assistant. Format replies with markdown: use **bold** for key terms and "- " for bullet lists (e.g. after "Tasks:" put each item on its own line starting with "- "). Use short paragraphs and line breaks between sections.\n\nUser: ${userMessage.content}`,
         onDelta: (delta) => {
           setMessages((prev) => {
             if (!prev.length) return prev;
@@ -79,14 +79,16 @@ export function ChatbotPage() {
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition hover:bg-white/10 hover:text-white"
+            className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled
           >
             <FiSettings className="h-3.5 w-3.5" />
             Configuration
           </button>
           <button
             type="button"
-            className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition hover:bg-white/10 hover:text-white"
+            className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300 transition hover:bg-white/10 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled
           >
             <FiUpload className="h-3.5 w-3.5" />
             Export
@@ -94,7 +96,9 @@ export function ChatbotPage() {
         </div>
       </header>
 
-      <div className="relative flex-1 min-h-0 flex flex-col items-center justify-center px-4 py-6">
+      <div
+        className={`relative flex-1 min-h-0 flex flex-col overflow-hidden py-6 ${messages.length === 0 ? "items-center justify-center px-4" : "pl-4 pr-0"}`}
+      >
         {messages.length === 0 ? (
           <>
             <div
@@ -125,29 +129,31 @@ export function ChatbotPage() {
             </div>
           </>
         ) : (
-          <div className="w-full max-w-3xl flex-1 overflow-auto space-y-4 py-4">
-            {messages.map((m, i) =>
-              m.role === "user" ? (
-                <div key={i} className="flex justify-end">
-                  <div className="rounded-2xl bg-violet-500/15 border border-violet-500/25 px-4 py-2.5 text-sm text-white max-w-[85%]">
-                    {m.content}
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-4">
+            <div className="max-w-3xl mx-auto space-y-4 py-4">
+              {messages.map((m, i) =>
+                m.role === "user" ? (
+                  <div key={i} className="flex justify-end">
+                    <div className="rounded-2xl bg-violet-500/15 border border-violet-500/25 px-4 py-2.5 text-sm text-white max-w-[85%]">
+                      {m.content}
+                    </div>
+                  </div>
+                ) : (
+                  <div key={i} className="flex justify-start">
+                    <div className="rounded-2xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm text-gray-200 max-w-[85%] [&_.prose]:!max-w-none">
+                      <MarkdownRenderer content={m.content} />
+                    </div>
+                  </div>
+                ),
+              )}
+              {loading && (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl bg-white/5 border border-white/10 px-4 py-2 text-sm text-gray-400">
+                    Thinking…
                   </div>
                 </div>
-              ) : (
-                <div key={i} className="flex justify-start">
-                  <div className="rounded-2xl bg-white/5 border border-white/10 px-4 py-2.5 text-sm text-gray-200 max-w-[85%] [&_.prose]:!max-w-none">
-                    <MarkdownRenderer content={m.content} />
-                  </div>
-                </div>
-              ),
-            )}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="rounded-2xl bg-white/5 border border-white/10 px-4 py-2 text-sm text-gray-400">
-                  Thinking…
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -170,7 +176,8 @@ export function ChatbotPage() {
             />
             <button
               type="button"
-              className="rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white transition"
+              className="rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled
               title="Voice input"
             >
               <FiMic className="h-4 w-4" />
@@ -188,21 +195,24 @@ export function ChatbotPage() {
             <div className="flex items-center gap-4 text-gray-500">
               <button
                 type="button"
-                className="flex items-center gap-1.5 transition hover:text-gray-300"
+                className="flex items-center gap-1.5 transition hover:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
               >
                 <FiPaperclip className="h-3.5 w-3.5" />
                 Attach
               </button>
               <button
                 type="button"
-                className="flex items-center gap-1.5 transition hover:text-gray-300"
+                className="flex items-center gap-1.5 transition hover:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
               >
                 <FiSettings className="h-3.5 w-3.5" />
                 Settings
               </button>
               <button
                 type="button"
-                className="flex items-center gap-1.5 transition hover:text-gray-300"
+                className="flex items-center gap-1.5 transition hover:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
               >
                 <FiMenu className="h-3.5 w-3.5" />
                 Options

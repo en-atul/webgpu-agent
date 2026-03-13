@@ -1,73 +1,46 @@
-# React + TypeScript + Vite
+# WebGPU Agent
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**WebGPU Agent** is a dashboard of AI tools that run entirely in your browser. One language model (e.g. Llama 3.2) is loaded via WebGPU and then used for chat, summarization, a personal knowledge base, and web search—no API keys, no server, and your data stays on your device.
 
-Currently, two official plugins are available:
+## Screenshots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| AI Chatbot | Knowledge Base | Web Search |
+|------------|----------------|------------|
+| ![AI Chatbot](ai-chatbot.avif) | ![Knowledge Base](knowledge-base.avif) | ![Web Search](web-search.avif) |
 
-## React Compiler
+## What’s in the app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Overview** — Home page with links to each tool.
+- **AI Chatbot** — Free-form chat with the loaded model. Replies stream token-by-token, support markdown and code blocks (with syntax highlighting), and the message list has its own scroll so the page doesn’t stretch. You can switch the active model from the header.
+- **Coding Copilot** — Paste or type code and ask the model to improve, explain, or refactor it. Good for quick edits and learning.
+- **Document Summarizer** — Paste long text and get a short summary from the same local model.
+- **Offline Knowledge Base** — Add notes (title + content). Then ask questions in natural language; the app sends your question plus all notes to the model and asks it to answer only from that context. Useful for personal docs, meeting notes, or reference material without sending data elsewhere.
+- **Web Search** — Enter a query; the app fetches results from DuckDuckGo (via a dev proxy to avoid CORS) and shows snippets. You can then ask the local model to summarize or synthesize those results.
 
-## Expanding the ESLint configuration
+Everything uses the **same in-browser model**. Load it once from the sidebar (progress bar shows download/init); when it’s ready, every tool can use it. Model choice is stored so you can switch between available WebLLM models from the header.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## How to run it
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+You need a browser with **WebGPU** (Chrome 113+, Edge 113+, or Safari 18+) and enough disk space for the model (e.g. ~600MB+ for Llama 3.2 1B).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+bun install
+bun run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the app, choose a model in the sidebar, and click **Download / Load Model**. When the bar hits 100%, the model is ready for all tools.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## How it’s built
+
+- **Bun** for install and run; **React 19** + **TypeScript** + **Vite** for the UI and build.
+- **MLC WebLLM** (WebGPU) to load and run the model in the browser; **Zustand** holds model state (progress, ready, selected model).
+- **React Router** for the shell and routes (`/`, `/chatbot`, `/copilot`, `/summarizer`, `/knowledge-base`, `/web-search`).
+- **react-markdown** + **remark-gfm** + **react-syntax-highlighter** for rendering assistant messages (lists, bold, code blocks).
+- **Tailwind CSS** for layout and styling.
+
+The core logic lives in `src/agent.ts`: it initializes the MLC engine, exposes `runAgent(prompt)` for one-shot answers and `runAgentStream({ prompt, onDelta })` for streaming. Each feature builds its own prompt (e.g. “answer from these notes”, “summarize this”, “summarize these search results”) and calls the same agent.
+
+## License
+
+Unlicensed.

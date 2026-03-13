@@ -27,14 +27,15 @@ export function KnowledgeBasePage() {
     e.preventDefault();
     if (!query.trim() || !ready || !notes.length) return;
     setLoading(true);
+    setAnswer("");
     try {
       const kbText = notes
-        .map((n) => `Title: ${n.title}\nContent: ${n.content}`)
-        .join("\n\n---\n\n");
+        .map((n) => `[${n.title}]\n${n.content}`)
+        .join("\n\n");
       const result = await runAgent(
-        `You are an offline knowledge base assistant. Answer questions using ONLY the provided notes. If the answer is not present, say you don't know.\n\nNotes:\n${kbText}\n\nQuestion: ${query}`,
+        `Answer this question using ONLY the notes below. If a note is relevant, use it to answer in 1–3 sentences. Only say "I don't know" if no note relates to the question.\n\nQuestion: ${query}\n\nNotes:\n${kbText}\n\nAnswer:`,
       );
-      setAnswer(result);
+      setAnswer(result.trim() || "I don't know.");
     } finally {
       setLoading(false);
     }
