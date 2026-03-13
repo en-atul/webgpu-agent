@@ -65,25 +65,27 @@ export function MarkdownRenderer({ content }: Props) {
               </strong>
             );
           },
-          code({ inline, className, children, ...props }) {
+          code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
-            if (!inline && match) {
+            const isBlock = !!match;
+            if (isBlock) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const style = oneDark as any;
               return (
                 <SyntaxHighlighter
-                  style={oneDark}
+                  style={style}
                   language={match[1]}
                   PreTag="div"
-                  {...props}
                 >
                   {String(children).replace(/\n$/, "")}
                 </SyntaxHighlighter>
               );
             }
-            return (
-              <code className={className} {...props}>
-                {children}
-              </code>
-            );
+return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
           },
         }}
       >
