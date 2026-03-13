@@ -129,8 +129,9 @@ export function ChatbotPage() {
                   <button
                     key={label}
                     type="button"
+                    disabled={label === "Create Image"}
                     onClick={() => onSuggestion(prompt)}
-                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-gray-200 transition hover:border-violet-500/40 hover:bg-violet-500/15 hover:text-white"
+                    className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-gray-200 transition hover:border-violet-500/40 hover:bg-violet-500/15 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white/5 disabled:hover:border-white/10"
                   >
                     <Icon className="h-4 w-4 text-violet-400/90" />
                     {label}
