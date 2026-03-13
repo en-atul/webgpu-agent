@@ -128,16 +128,19 @@ export function RootLayout() {
               </Tooltip>
               </div>
               <div className="relative w-full rounded-full p-[3px] overflow-hidden">
-                <div
-                  className="absolute left-1/2 top-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full animate-gradient-spin"
-                  style={{
-                    background:
-                      "conic-gradient(from 0deg at 50% 50%, #8b5cf6, #a78bfa, #c084fc, #7c3aed, #6d28d9, #8b5cf6)",
-                  }}
-                />
+                {!loading && (
+                  <div
+                    className="absolute left-1/2 top-1/2 w-[150%] h-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full animate-gradient-spin"
+                    style={{
+                      background:
+                        "conic-gradient(from 0deg at 50% 50%, #8b5cf6, #a78bfa, #c084fc, #7c3aed, #6d28d9, #8b5cf6)",
+                    }}
+                  />
+                )}
                 <button
                   onClick={loadModel}
-                  className="relative w-full rounded-full bg-black hover:bg-neutral-900 border border-violet-500/50 px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors z-10"
+                  disabled={loading}
+                  className="relative w-full rounded-full bg-black hover:bg-neutral-900 border border-violet-500/50 px-3 py-2 text-xs font-medium text-white shadow-lg transition-colors z-10 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-black"
                 >
                   Download / Load Model
                 </button>
