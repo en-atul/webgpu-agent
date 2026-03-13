@@ -7,6 +7,7 @@ import { CopilotPage } from "./features/copilot/ui/CopilotPage";
 import { SummarizerPage } from "./features/summarizer/ui/SummarizerPage";
 import { KnowledgeBasePage } from "./features/knowledge-base/ui/KnowledgeBasePage";
 import { WebSearchPage } from "./features/web-search/ui/WebSearchPage";
+import { CoderAgentPage } from "./features/coder-agent/ui/CoderAgentPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="summarizer" element={<SummarizerPage />} />
           <Route path="knowledge-base" element={<KnowledgeBasePage />} />
           <Route path="web-search" element={<WebSearchPage />} />
+          <Route path="coder-agent" element={<CoderAgentPage />} />
         </Route>
       </Routes>
     </AppProviders>

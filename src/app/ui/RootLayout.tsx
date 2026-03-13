@@ -7,6 +7,7 @@ import {
   FiInfo,
   FiMessageCircle,
   FiCode,
+  FiCpu,
   FiFileText,
   FiBook,
   FiSearch,
@@ -73,6 +74,19 @@ export function RootLayout() {
           >
             <FiCode className="h-4 w-4 shrink-0 text-purple-400" />
             <span>Coding Copilot</span>
+          </NavLink>
+          <NavLink
+            to="/coder-agent"
+            className={({ isActive }) =>
+              `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
+                isActive
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
+                  : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+              }`
+            }
+          >
+            <FiCpu className="h-4 w-4 shrink-0 text-indigo-400" />
+            <span>Coder Agent</span>
           </NavLink>
           <NavLink
             to="/summarizer"

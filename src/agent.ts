@@ -1,5 +1,20 @@
-import { CreateMLCEngine, MLCEngine, prebuiltAppConfig } from "@mlc-ai/web-llm";
-let engine: MLCEngine | null = null;
+import {
+  CreateWebWorkerMLCEngine,
+  prebuiltAppConfig,
+} from "@mlc-ai/web-llm";
+import type { MLCEngineInterface } from "@mlc-ai/web-llm";
+
+let engine: MLCEngineInterface | null = null;
+let worker: Worker | null = null;
+
+function getWorker(): Worker {
+  if (!worker) {
+    worker = new Worker(new URL("./worker.ts", import.meta.url), {
+      type: "module",
+    });
+  }
+  return worker;
+}
 
 type PrebuiltModelEntry = {
   model_id: string;
@@ -35,10 +50,12 @@ export function setCurrentModelId(id: string) {
   engine = null;
 }
 
-export async function initModel(onProgress?: ProgressCallback): Promise<MLCEngine> {
+export async function initModel(
+  onProgress?: ProgressCallback,
+): Promise<MLCEngineInterface> {
   if (engine) return engine;
 
-  engine = await CreateMLCEngine(currentModelId, {
+  engine = await CreateWebWorkerMLCEngine(getWorker(), currentModelId, {
     appConfig: prebuiltAppConfig,
     initProgressCallback: (p) => {
       onProgress?.({
@@ -51,7 +68,7 @@ export async function initModel(onProgress?: ProgressCallback): Promise<MLCEngin
   return engine;
 }
 
-export function getEngine(): MLCEngine | null {
+export function getEngine(): MLCEngineInterface | null {
   return engine;
 }
 

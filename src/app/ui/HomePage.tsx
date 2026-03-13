@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   FiMessageCircle,
   FiCode,
+  FiCpu,
   FiFileText,
   FiBook,
   FiSearch,
@@ -22,6 +23,13 @@ const FEATURES = [
     path: "/copilot",
     icon: FiCode,
     accent: "purple",
+  },
+  {
+    title: "Coder Agent",
+    description: "Multi-agent pipeline: Planner → Coder → Reviewer for structured code generation.",
+    path: "/coder-agent",
+    icon: FiCpu,
+    accent: "indigo",
   },
   {
     title: "Document Summarizer",
@@ -55,6 +63,8 @@ const accentClasses: Record<string, string> = {
     "text-amber-400 border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20",
   cyan: "text-cyan-400 border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20",
   pink: "text-pink-400 border-pink-500/30 bg-pink-500/10 hover:bg-pink-500/20",
+  indigo:
+    "text-indigo-400 border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20",
 };
 
 export function HomePage() {
