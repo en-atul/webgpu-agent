@@ -3,12 +3,10 @@ import { FiCpu, FiChevronDown } from "react-icons/fi";
 import { useModelStore } from "../model/store";
 
 export function formatModelId(id: string): string {
-  // Llama-style: ...-Instruct-XXX-MLC or ...-Instruct-XXX-MLC-1k
   const instructMatch = id.match(/^(.+)-Instruct-([a-zA-Z0-9_]+)-MLC(-1k)?$/);
   if (instructMatch) {
     return `${instructMatch[1]} (${instructMatch[2]})`;
   }
-  // Snowflake Arctic Embed: ...-qXXX-MLC-bNN
   const snowflakeMatch = id.match(/^(.+)-(q[0-9a-zA-Z_]+)-MLC-b([0-9]+)$/);
   if (snowflakeMatch) {
     const base = snowflakeMatch[1].replace(/-/g, " ");
@@ -17,7 +15,6 @@ export function formatModelId(id: string): string {
     const titleCase = base.replace(/\b\w/g, (c) => c.toUpperCase());
     return `${titleCase} (${quant}, b${batch})`;
   }
-  // DeepSeek, Hermes, Mistral: ...-qXXX-MLC or ...-qXXX-MLC-1k
   const quantMatch = id.match(/^(.+)-(q[0-9a-zA-Z_]+)-MLC(-1k)?$/);
   if (quantMatch) {
     const base = quantMatch[1];

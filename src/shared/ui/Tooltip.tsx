@@ -24,13 +24,37 @@ export function Tooltip({ content, children, placement = "top" }: Props) {
           }`}
         >
           {placement === "bottom" && (
-            <span className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent border-b-neutral-800" />
+            <svg
+              width="14"
+              height="8"
+              viewBox="0 0 14 8"
+              className="block -mb-px"
+            >
+              <path
+                d="M0 8 L7 0 L14 8"
+                fill="#050505"
+                stroke="rgba(255,255,255,0.1)"
+                strokeWidth="1"
+              />
+            </svg>
           )}
-          <span className="px-3 py-2 text-xs text-gray-100 bg-neutral-800 border border-white/10 rounded-lg shadow-2xl min-w-[200px] max-w-[280px] text-left whitespace-normal">
+          <span className="px-3 py-2 text-xs text-gray-100 bg-[#050505] border border-white/10 rounded-lg shadow-2xl min-w-[200px] max-w-[280px] text-left whitespace-normal">
             {content}
           </span>
           {placement === "top" && (
-            <span className="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-neutral-800 -mt-px" />
+            <svg
+              width="14"
+              height="8"
+              viewBox="0 0 14 8"
+              className="block -mt-px"
+            >
+              <path
+                d="M0 0 L7 8 L14 0"
+                fill="#050505"
+                stroke="rgba(255,255,255,0.1)"
+                strokeWidth="1"
+              />
+            </svg>
           )}
         </span>
       )}
