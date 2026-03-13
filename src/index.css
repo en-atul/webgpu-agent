@@ -13,8 +13,8 @@ body {
 }
 
 body {
-  background-color: #050505; /* matte black */
-  color: #9ca3af; /* gray-400 */
+  background-color: #050505;
+  color: #9ca3af;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     sans-serif;
 }

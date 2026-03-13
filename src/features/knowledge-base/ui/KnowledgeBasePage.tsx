@@ -3,6 +3,8 @@ import { useKnowledgeBaseStore } from "../model/store";
 import { runAgent } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
+import { Input } from "../../../shared/ui/Input";
+import { Textarea } from "../../../shared/ui/Textarea";
 
 export function KnowledgeBasePage() {
   const { notes, addNote } = useKnowledgeBaseStore();
@@ -39,33 +41,33 @@ export function KnowledgeBasePage() {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6">
       <div className="space-y-3">
         <h2 className="text-xl font-semibold">Offline Knowledge Base</h2>
-        <form onSubmit={onAddNote} className="space-y-2">
-          <input
+        <form onSubmit={onAddNote} className="space-y-4">
+          <Input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
             placeholder="Note title"
           />
-          <textarea
+          <Textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="w-full min-h-32 rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
             placeholder="Note content…"
+            rows={5}
+            className="min-h-28"
           />
           <button
             type="submit"
-            className="rounded bg-sky-600 hover:bg-sky-500 px-3 py-2 text-sm font-medium"
+            className="rounded-xl bg-violet-600/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500/90"
           >
             Add Note
           </button>
         </form>
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-slate-200">Notes</h3>
+          <h3 className="text-sm font-medium text-gray-200">Notes</h3>
           {!notes.length && (
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-gray-400">
               Add some notes to build your offline knowledge base.
             </p>
           )}
@@ -73,10 +75,10 @@ export function KnowledgeBasePage() {
             {notes.map((n) => (
               <li
                 key={n.id}
-                className="border border-slate-800 rounded p-2 bg-slate-900/60"
+                className="rounded-xl border border-white/10 bg-white/5 p-3"
               >
                 <div className="font-medium">{n.title}</div>
-                <p className="text-xs text-slate-300 whitespace-pre-wrap">
+                <p className="text-xs text-gray-300 whitespace-pre-wrap">
                   {n.content}
                 </p>
               </li>
@@ -85,7 +87,7 @@ export function KnowledgeBasePage() {
         </div>
       </div>
       <div className="space-y-3">
-        <h3 className="text-sm font-medium text-slate-200">
+        <h3 className="text-sm font-medium text-gray-200">
           Ask the knowledge base
         </h3>
         {!ready && (
@@ -93,18 +95,17 @@ export function KnowledgeBasePage() {
             Load the model from the sidebar to enable Q&amp;A.
           </p>
         )}
-        <form onSubmit={onAsk} className="space-y-2">
-          <input
+        <form onSubmit={onAsk} className="space-y-4">
+          <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
             placeholder="Ask a question about your notes…"
             disabled={!ready || loading || !notes.length}
           />
           <button
             type="submit"
             disabled={!ready || loading || !notes.length}
-            className="rounded bg-sky-600 hover:bg-sky-500 disabled:opacity-50 px-3 py-2 text-sm font-medium"
+            className="rounded-xl bg-violet-600/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500/90 disabled:opacity-50 disabled:shadow-none"
           >
             Ask
           </button>

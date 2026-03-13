@@ -2,6 +2,7 @@ import { type FormEventHandler, useState } from "react";
 import { runAgent } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
+import { Input } from "../../../shared/ui/Input";
 
 type DuckDuckGoTopic = {
   Text?: string;
@@ -119,9 +120,9 @@ export function WebSearchPage() {
   };
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-semibold">Web Search Tool</h2>
-      <p className="text-sm text-slate-300 max-w-xl">
+    <div className="space-y-6 p-4 md:p-6">
+      <h2 className="text-xl font-semibold text-white">Web Search Tool</h2>
+      <p className="text-sm text-gray-400 max-w-xl">
         This tool runs a real web search (DuckDuckGo Instant Answer API) and
         then lets the local WebGPU model summarize and interpret the results.
       </p>
@@ -130,18 +131,17 @@ export function WebSearchPage() {
           Load the model from the sidebar to get guidance.
         </p>
       )}
-      <form onSubmit={onSubmit} className="space-y-2">
-        <input
+      <form onSubmit={onSubmit} className="space-y-4">
+        <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
           placeholder="What do you want to research on the web? (e.g. vite 8 release notes)"
           disabled={!ready || loading}
         />
         <button
           type="submit"
           disabled={!ready || loading}
-          className="rounded bg-sky-600 hover:bg-sky-500 disabled:opacity-50 px-3 py-2 text-sm font-medium"
+          className="rounded-xl bg-violet-600/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500/90 disabled:opacity-50 disabled:shadow-none"
         >
           {loading ? "Searching…" : "Run web search"}
         </button>
@@ -155,25 +155,25 @@ export function WebSearchPage() {
 
       {results.length > 0 && (
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-slate-200">
+          <h3 className="text-sm font-semibold text-gray-200">
             Top results
           </h3>
           <ul className="space-y-2 text-sm">
             {results.map((r) => (
               <li
                 key={r.url}
-                className="border border-slate-800 rounded p-3 bg-slate-900/60"
+                className="rounded-xl border border-white/10 bg-white/5 p-3"
               >
                 <a
                   href={r.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-sky-400 hover:underline font-medium"
+                  className="text-violet-300 hover:text-violet-200 hover:underline font-medium"
                 >
                   {r.title}
                 </a>
-                <p className="text-xs text-slate-400 break-all">{r.url}</p>
-                <p className="mt-1 text-xs text-slate-200">{r.snippet}</p>
+                <p className="text-xs text-gray-500 break-all mt-0.5">{r.url}</p>
+                <p className="mt-1 text-xs text-gray-300">{r.snippet}</p>
               </li>
             ))}
           </ul>
@@ -181,8 +181,8 @@ export function WebSearchPage() {
       )}
 
       {analysis && (
-        <div className="pt-2 border-t border-slate-800">
-          <h3 className="text-sm font-semibold text-slate-200 mb-2">
+        <div className="pt-4 border-t border-white/10">
+          <h3 className="text-sm font-semibold text-gray-200 mb-2">
             AI interpretation
           </h3>
           <MarkdownRenderer content={analysis} />

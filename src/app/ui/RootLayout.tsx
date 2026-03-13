@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useModelStore } from "../../shared/model/store";
-import { FiCpu, FiChevronDown } from "react-icons/fi";
+import {
+  FiCpu,
+  FiChevronDown,
+  FiGrid,
+  FiMessageCircle,
+  FiCode,
+  FiFileText,
+  FiBook,
+  FiSearch,
+} from "react-icons/fi";
 
 export function RootLayout() {
   const [modelMenuOpen, setModelMenuOpen] = useState(false);
@@ -18,7 +27,6 @@ export function RootLayout() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-gray-200 flex">
-      {/* Sidebar */}
       <aside className="w-64 border-r border-white/5 px-5 py-6 flex flex-col gap-6 bg-black/70 backdrop-blur">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-white">
@@ -35,12 +43,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-gray-500" />
+            <FiGrid className="h-4 w-4 shrink-0 text-gray-400" />
             <span>Overview</span>
           </NavLink>
           <NavLink
@@ -48,12 +56,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <FiMessageCircle className="h-4 w-4 shrink-0 text-emerald-400" />
             <span>AI Chatbot</span>
           </NavLink>
           <NavLink
@@ -61,12 +69,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+            <FiCode className="h-4 w-4 shrink-0 text-purple-400" />
             <span>Coding Copilot</span>
           </NavLink>
           <NavLink
@@ -74,12 +82,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-300" />
+            <FiFileText className="h-4 w-4 shrink-0 text-amber-400" />
             <span>Summarizer</span>
           </NavLink>
           <NavLink
@@ -87,12 +95,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />
+            <FiBook className="h-4 w-4 shrink-0 text-cyan-400" />
             <span>Knowledge Base</span>
           </NavLink>
           <NavLink
@@ -100,12 +108,12 @@ export function RootLayout() {
             className={({ isActive }) =>
               `flex items-center gap-2 rounded-lg px-3 py-2 transition ${
                 isActive
-                  ? "bg-sky-500/15 text-sky-300 border border-sky-500/40"
+                  ? "bg-violet-500/15 text-violet-300 border border-violet-500/40"
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               }`
             }
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-pink-400" />
+            <FiSearch className="h-4 w-4 shrink-0 text-pink-400" />
             <span>Web Search</span>
           </NavLink>
         </nav>
@@ -115,14 +123,14 @@ export function RootLayout() {
             <>
               <button
                 onClick={loadModel}
-                className="w-full rounded-lg bg-sky-600 hover:bg-sky-500 px-3 py-2 text-xs font-medium text-white shadow-sm shadow-sky-500/40"
+                className="w-full rounded-lg bg-violet-600/90 hover:bg-violet-500/90 px-3 py-2 text-xs font-medium text-white shadow-sm shadow-violet-600/30"
               >
                 Download / Load Model
               </button>
               <p>{status}</p>
               <div className="w-full h-1.5 rounded-full bg-neutral-900 overflow-hidden">
                 <div
-                  className="h-full bg-sky-400 transition-[width] duration-500 ease-out"
+                  className="h-full bg-violet-500/80 transition-[width] duration-500 ease-out"
                   style={{ width: `${Math.round(progress * 100)}%` }}
                 />
               </div>
@@ -138,7 +146,6 @@ export function RootLayout() {
         </div>
       </aside>
 
-      {/* Main area */}
       <main className="flex-1 flex flex-col px-8 py-6">
         <header className="flex items-center justify-between gap-4">
           <div>
@@ -205,8 +212,8 @@ export function RootLayout() {
           </div>
         </header>
 
-        <section className="mt-6 flex-1">
-          <div className="h-full rounded-2xl border border-white/5 bg-gradient-to-br from-neutral-950/80 via-neutral-950/60 to-black/80 shadow-[0_0_40px_rgba(0,0,0,0.6)] p-6 overflow-hidden">
+        <section className="mt-2 flex-1 min-h-0">
+          <div className="h-full rounded-2xl border border-white/5 bg-gradient-to-br from-neutral-950/80 via-neutral-950/60 to-black/80 shadow-[0_0_40px_rgba(0,0,0,0.6)] overflow-hidden">
             <Outlet />
           </div>
         </section>

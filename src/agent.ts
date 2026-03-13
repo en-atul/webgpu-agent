@@ -33,7 +33,6 @@ export function getCurrentModelId(): string {
 export function setCurrentModelId(id: string) {
   if (currentModelId === id) return;
   currentModelId = id;
-  // Force re-init on next load
   engine = null;
 }
 

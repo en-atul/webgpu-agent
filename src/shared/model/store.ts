@@ -38,9 +38,7 @@ function persistDownloaded(models: string[]) {
       "webgpu-downloaded-models",
       JSON.stringify(models),
     );
-  } catch {
-    // ignore quota errors
-  }
+  } catch {}
 }
 
 export const useModelStore = create<ModelState>((set, get) => ({

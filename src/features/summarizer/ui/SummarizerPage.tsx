@@ -2,6 +2,7 @@ import { type FormEventHandler, useState } from "react";
 import { runAgent } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
+import { Textarea } from "../../../shared/ui/Textarea";
 
 export function SummarizerPage() {
   const { ready } = useModelStore();
@@ -24,25 +25,26 @@ export function SummarizerPage() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4 md:p-6">
       <h2 className="text-xl font-semibold">Document Summarizer</h2>
       {!ready && (
         <p className="text-sm text-amber-300">
           Load the model from the sidebar to summarize documents.
         </p>
       )}
-      <form onSubmit={onSubmit} className="space-y-2">
-        <textarea
+      <form onSubmit={onSubmit} className="space-y-4">
+        <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          className="w-full min-h-40 rounded border border-slate-700 bg-slate-900 px-3 py-2 text-sm"
           placeholder="Paste or type your document here…"
           disabled={!ready || loading}
+          rows={10}
+          className="min-h-48"
         />
         <button
           type="submit"
           disabled={!ready || loading}
-          className="rounded bg-sky-600 hover:bg-sky-500 disabled:opacity-50 px-3 py-2 text-sm font-medium"
+          className="rounded-xl bg-violet-600/90 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-violet-600/25 transition hover:bg-violet-500/90 disabled:opacity-50 disabled:shadow-none"
         >
           Summarize
         </button>
