@@ -1,4 +1,4 @@
-import { type SyntheticEvent, useState } from "react";
+import { type SyntheticEvent, useEffect, useRef, useState } from "react";
 import { runAgentStream } from "../../../agent";
 import { useModelStore } from "../../../shared/model/store";
 import { MarkdownRenderer } from "../../../shared/ui/MarkdownRenderer";
@@ -28,6 +28,14 @@ export function ChatbotPage() {
     { role: "user" | "assistant"; content: string }[]
   >([]);
   const [loading, setLoading] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    scrollContainerRef.current?.scrollTo({
+      top: scrollContainerRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [messages, loading]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || !ready) return;
@@ -100,7 +108,7 @@ export function ChatbotPage() {
       </header>
 
       <div
-        className={`relative flex-1 min-h-0 flex flex-col overflow-hidden py-6 ${messages.length === 0 ? "items-center justify-center px-4" : "pl-4 pr-0"}`}
+        className={`relative flex-1 min-h-0 flex flex-col overflow-hidden ${messages.length === 0 ? "py-6 items-center justify-center px-4" : "py-2 pl-4 pr-0"}`}
       >
         {messages.length === 0 ? (
           <>
@@ -132,8 +140,11 @@ export function ChatbotPage() {
             </div>
           </>
         ) : (
-          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-4">
-            <div className="max-w-3xl mx-auto space-y-4 py-4">
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 min-h-0 overflow-y-auto overscroll-contain pr-4"
+          >
+            <div className="max-w-3xl mx-auto space-y-4 py-2">
               {messages.map((m, i) =>
                 m.role === "user" ? (
                   <div key={i} className="flex justify-end">
